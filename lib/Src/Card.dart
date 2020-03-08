@@ -16,28 +16,44 @@ class ShowCard extends StatefulWidget {
 
 class _ShowCardState extends State<ShowCard>
     with SingleTickerProviderStateMixin {
-  Animation<double> animationShows;
-  Animation<double> animationCard;
+  // Animation<double> animationShows;
+  /* Animation<double> animationCard;
 
-  AnimationController controller;
+  AnimationController controller;*/
+
+  Animation _arrowAnimation;
+  AnimationController _arrowAnimationController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    controller =
+    /*   controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
 
-    animationShows = Tween<double>(begin: 100, end: 70).animate(controller)
+    */ /* animationShows = Tween<double>(begin: 100, end: 70).animate(controller)
       ..addListener(() {
         setState(() {});
       });
+*/ /*
+    animationCard = Tween<double>(begin: 0.3, end: 0).animate(controller);*/
 
-    animationCard = Tween<double>(begin: 120, end: 0).animate(controller)
-      ..addListener(() {
-        setState(() {});
-      });
+    //  controller.forward();
+
+    _arrowAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _arrowAnimation =
+        Tween(begin: 0.4, end: 0).animate(_arrowAnimationController);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    _arrowAnimationController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -55,49 +71,95 @@ class _ShowCardState extends State<ShowCard>
     *
     * */
 
-    return Transform(
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.002)
-        ..rotateY(0.1)
-        ..rotateX(0)
-        ..rotateZ(0),
-      origin: Offset.zero,
-      alignment: Alignment.center,
+    return Column(
+      children: <Widget>[
 
-      child: new Stack(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 55),
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2.5,
-              height: 220,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: color_code[widget.i],
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: 2,
-                      blurRadius: 2,
+
+        Stack(
+          children: <Widget>[
+
+
+
+            AnimatedBuilder(
+                animation: _arrowAnimationController,
+                builder: (context, child) {
+
+
+                  if (widget.i == 0 || widget.current_page == null) {
+
+                  } else {
+                    if (widget.current_page < (widget.i - (0.2))) {
+
+
+                      _arrowAnimationController.reverse();
+
+
+
+                    } else {
+
+                      _arrowAnimationController.forward();
+
+                    }
+                  }
+
+                  return Transform(
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.002)
+                      ..rotateY(0)
+                      ..rotateX(0)
+                      ..rotateZ(0),
+                    origin: Offset.zero,
+                    alignment: Alignment.center,
+                    child: new Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(right: 55),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            height: 220,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                color: color_code[widget.i],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                  ),
+                                ]),
+                            child: Column(
+                              children: <Widget>[
+                                new Text(
+                                  "I am Hasib Akon",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      ],
                     ),
-                  ]),
-              child: Column(
-                children: <Widget>[
-                  new Text(
-                    "I am Hasib Akon",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900),
-                  ),
+                  );
 
-                ],
-              ),
+                }/*Transform.rotate(
+                  angle: _arrowAnimation.value,
+                  child: Icon(
+                    Icons.expand_more,
+                    size: 50.0,
+                    color: Colors.black,
+                  ),
+                ),*/
             ),
-          ),
-          show(widget.current_page, widget.i),
-        ],
-      ),
+            show(widget.current_page, widget.i),
+
+          ],
+        )
+
+      ],
     );
   }
 
@@ -139,3 +201,9 @@ class _ShowCardState extends State<ShowCard>
     );
   }
 }
+
+
+/*
+*
+*  show(widget.current_page, widget.i),
+* */
