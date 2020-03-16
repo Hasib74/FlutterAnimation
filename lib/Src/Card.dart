@@ -21,8 +21,10 @@ class _ShowCardState extends State<ShowCard>
 
   AnimationController controller;*/
 
-  Animation _arrowAnimation;
+  Animation<double> _inAnimation;
   AnimationController _arrowAnimationController;
+
+  Animation<double> _outAnimation;
 
   @override
   void initState() {
@@ -43,8 +45,11 @@ class _ShowCardState extends State<ShowCard>
 
     _arrowAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _arrowAnimation =
-        Tween(begin: 0.4, end: 0).animate(_arrowAnimationController);
+    _inAnimation =
+        Tween(begin: 0.3, end: 0.0).animate(_arrowAnimationController);
+
+    _outAnimation =
+        Tween(begin: -0.3, end: 0.0).animate(_arrowAnimationController);
   }
 
   @override
@@ -58,54 +63,34 @@ class _ShowCardState extends State<ShowCard>
 
   @override
   Widget build(BuildContext context) {
-    //var page = int.parse(widget.current_page.toString());
 
-    // print(page);
-
-    /*
-    *    transform: Matrix4.identity()
-         ..setEntry(3, 2, 0.002)
-        ..rotateY( 0.3)
-        ..rotateX(0)
-        ..rotateZ(0),
-    *
-    * */
 
     return Column(
       children: <Widget>[
-
-
         Stack(
           children: <Widget>[
-
-
-
             AnimatedBuilder(
                 animation: _arrowAnimationController,
                 builder: (context, child) {
-
+                  double value;
 
                   if (widget.i == 0 || widget.current_page == null) {
-
                   } else {
-                    if (widget.current_page < (widget.i - (0.2))) {
-
+                    if (widget.current_page < (widget.i - 0.2)) {
+                      // value = _outAnimation.value;
 
                       _arrowAnimationController.reverse();
-
-
-
                     } else {
+                      // value = _inAnimation.value;
 
                       _arrowAnimationController.forward();
-
                     }
                   }
 
                   return Transform(
                     transform: Matrix4.identity()
                       ..setEntry(3, 2, 0.002)
-                      ..rotateY(0)
+                      ..rotateY(_inAnimation.value)
                       ..rotateX(0)
                       ..rotateZ(0),
                     origin: Offset.zero,
@@ -118,7 +103,8 @@ class _ShowCardState extends State<ShowCard>
                             width: MediaQuery.of(context).size.width / 2.5,
                             height: 220,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                                 color: color_code[widget.i],
                                 boxShadow: [
                                   BoxShadow(
@@ -140,12 +126,10 @@ class _ShowCardState extends State<ShowCard>
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   );
-
-                }/*Transform.rotate(
+                } /*Transform.rotate(
                   angle: _arrowAnimation.value,
                   child: Icon(
                     Icons.expand_more,
@@ -153,12 +137,10 @@ class _ShowCardState extends State<ShowCard>
                     color: Colors.black,
                   ),
                 ),*/
-            ),
+                ),
             show(widget.current_page, widget.i),
-
           ],
         )
-
       ],
     );
   }
@@ -201,9 +183,3 @@ class _ShowCardState extends State<ShowCard>
     );
   }
 }
-
-
-/*
-*
-*  show(widget.current_page, widget.i),
-* */
